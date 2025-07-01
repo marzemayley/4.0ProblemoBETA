@@ -1,33 +1,37 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2822
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+import os
+import openai
+# For demonstration purposes, we'll use dummy functions for Gemini, Copilot, and Meta AI.
+# In practice, you would use the actual APIs or SDKs provided by each service.
 
-\f0\fs24 \cf0 import random\
-\
-responses = \{\
-    "hello": ["Hi there!", "Hello!", "Hey!"],\
-    "how are you": ["I'm an AI, so I'm always good.", "Doing well, thanks! HBY?", "Great, how about you?"],\
-    "bye": ["Goodbye!", "See you later!", "Bye!"],\
-\}\
-\
-def get_response(user_input):\
-    user_input = user_input.lower()\
-    for key in responses:\
-        if key in user_input:\
-            return random.choice(responses[key])\
-    return "I'm not sure how to respond to that."\
-\
-def main():\
-    print("AI Chatbot. Type 'bye' to exit.")\
-    while True:\
-        user_input = input("You: ")\
-        if "bye" in user_input.lower():\
-            print("AI:", get_response("bye"))\
-            break\
-        print("AI:", get_response(user_input))\
-\
-if __name__ == "__main__":\
-    main()}
+def ask_google_gemini(prompt):
+    # Placeholder: Replace with actual Gemini API call
+    return "[Google Gemini] This is a simulated response to: " + prompt
+
+def ask_copilot(prompt):
+    # Placeholder: Copilot is designed as a code assistant, not a general chat API,
+    # so you would only be able to use it via GitHub or specific integrations.
+    return "[GitHub Copilot] This is a simulated response to: " + prompt
+
+def ask_meta_ai(prompt):
+    # Placeholder: Replace with actual Meta AI (Llama) API call
+    return "[Meta AI] This is a simulated response to: " + prompt
+
+def ask_chatgpt(prompt):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return "[ChatGPT 4.0] " + response['choices'][0]['message']['content']
+
+def aggregate_answers(prompt):
+    responses = []
+    responses.append(ask_google_gemini(prompt))
+    responses.append(ask_copilot(prompt))
+    responses.append(ask_meta_ai(prompt))
+    responses.append(ask_chatgpt(prompt))
+    return "\n\n".join(responses)
+
+if __name__ == "__main__":
+    prompt = input("Ask your question: ")
+    print(aggregate_answers(prompt))
